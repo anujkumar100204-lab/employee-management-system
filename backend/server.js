@@ -1,11 +1,13 @@
+require('dotenv').config();
 const express = require('express');
+const db = require('./config/db');
 
 const app = express();
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.get('/', (req, res) => {
-  res.send('Vertex Technologies EMS Backend is building');
+  res.send('Vertex Technologies EMS Backend is running!');
 });
 
 app.listen(PORT, () => {
