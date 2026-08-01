@@ -3,6 +3,7 @@ const express = require('express');
 const db = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const employeeRoutes = require('./routes/employeeRoutes');
+const departmentRoutes = require('./routes/departmentRoutes');
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/employees', employeeRoutes);
+app.use('/api/departments', departmentRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
