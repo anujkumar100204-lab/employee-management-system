@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import EmployeeList from './pages/EmployeeList';
 import ProtectedRoute from './components/ProtectedRoute';
+import AddEmployee from './pages/AddEmployee';
 
 function App() {
   return (
@@ -25,6 +26,14 @@ function App() {
           element={
             <ProtectedRoute>
               <EmployeeList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employees/add"
+          element={
+            <ProtectedRoute>
+              <AddEmployee />
             </ProtectedRoute>
           }
         />
