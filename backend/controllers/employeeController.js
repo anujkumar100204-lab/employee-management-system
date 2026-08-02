@@ -66,7 +66,9 @@ const addEmployee = (req, res) => {
 };
 
 const getEmployees = (req, res) => {
-  getAllEmployees((err, employees) => {
+  const { search, department_id } = req.query;
+
+  getAllEmployees({ search, department_id }, (err, employees) => {
     if (err) {
       return res.status(500).json({ message: 'Server error', error: err.message });
     }

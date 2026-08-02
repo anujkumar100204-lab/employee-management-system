@@ -14,8 +14,8 @@ const getLastEmployeeId = (callback) => {
   });
 };
 
-const getAllEmployees = (callback) => {
-  const query = `
+const getAllEmployees = (filters, callback) => {
+  let query = `
     SELECT 
       employees.id, 
       employees.employee_id, 
@@ -23,12 +23,26 @@ const getAllEmployees = (callback) => {
       employees.gender, 
       employees.phone, 
       employees.salary,
-      departments.department_name
+      departments.department_name,
+      employees.department_id
     FROM employees
     JOIN departments ON employees.department_id = departments.id
+    WHERE 1=1
   `;
 
-  db.query(query, (err, results) => {
+  const values = [];
+
+  if (filters.search) {
+    query += ' AND (employees.full_name LIKE ? OR employees.employee_id LIKE ?)';
+    values.push(`%${filters.search}%`, `%${filters.search}%`);
+  }
+
+  if (filters.department_id) {
+    query += ' AND employees.department_id = ?';
+    values.push(filters.department_id);
+  }
+
+  db.query(query, values, (err, results) => {
     if (err) return callback(err, null);
     callback(null, results);
   });
