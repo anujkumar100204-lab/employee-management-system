@@ -1,20 +1,26 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import api from '../api/axios';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
 
     try {
       const response = await api.post('/auth/login', { email, password });
-      console.log(response.data);
+
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+
+      toast.success('Login successful!');
+      navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
+      toast.error(err.response?.data?.message || 'Login failed');
     }
   };
 
@@ -30,12 +36,6 @@ function Login() {
         <p className="text-sm text-gray-500 mb-6 text-center">
           Employee Management System
         </p>
-
-        {error && (
-          <div className="bg-red-100 text-red-600 text-sm p-2 rounded mb-4">
-            {error}
-          </div>
-        )}
 
         <label className="block text-sm font-medium text-slate-700 mb-1">
           Email
