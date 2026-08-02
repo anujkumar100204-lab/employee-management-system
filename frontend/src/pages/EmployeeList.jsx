@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import api from '../api/axios';
 
 function EmployeeList() {
@@ -7,6 +9,7 @@ function EmployeeList() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [departmentId, setDepartmentId] = useState('');
+  const navigate = useNavigate();
 
   const fetchEmployees = async () => {
     try {
@@ -43,9 +46,33 @@ function EmployeeList() {
     fetchEmployees();
   }, [search, departmentId]);
 
+  const handleDelete = async (id, name) => {
+    const confirmed = window.confirm(`Are you sure you want to delete ${name}?`);
+    if (!confirmed) return;
+
+    try {
+      const token = localStorage.getItem('token');
+      await api.delete(`/employees/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      toast.success('Employee deleted successfully');
+      fetchEmployees();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to delete employee');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-100 p-8">
-      <h1 className="text-2xl font-bold text-slate-800 mb-6">Employees</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-slate-800">Employees</h1>
+        <button
+          onClick={() => navigate('/employees/add')}
+          className="bg-blue-600 text-white font-medium px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+        >
+          + Add Employee
+        </button>
+      </div>
 
       <div className="flex gap-4 mb-4">
         <input
@@ -83,22 +110,44 @@ function EmployeeList() {
                 <th className="px-4 py-3 text-sm font-semibold text-slate-600">Department</th>
                 <th className="px-4 py-3 text-sm font-semibold text-slate-600">Phone</th>
                 <th className="px-4 py-3 text-sm font-semibold text-slate-600">Salary</th>
+                <th className="px-4 py-3 text-sm font-semibold text-slate-600">Actions</th>
               </tr>
             </thead>
             <tbody>
               {employees.map((emp) => (
                 <tr key={emp.id} className="border-b border-gray-100 hover:bg-slate-50">
                   <td className="px-4 py-3 text-sm text-slate-700">{emp.employee_id}</td>
-                  <td className="px-4 py-3 text-sm text-slate-700">{emp.full_name}</td>
+                  <td className="px-4 py-3 text-sm text-slate-700">
+                    <button
+                      onClick={() => navigate(`/employees/${emp.id}`)}
+                      className="text-blue-600 hover:underline"
+                    >
+                      {emp.full_name}
+                    </button>
+                  </td>
                   <td className="px-4 py-3 text-sm text-slate-700 capitalize">{emp.gender}</td>
                   <td className="px-4 py-3 text-sm text-slate-700">{emp.department_name}</td>
                   <td className="px-4 py-3 text-sm text-slate-700">{emp.phone}</td>
                   <td className="px-4 py-3 text-sm text-slate-700">₹{emp.salary}</td>
+                  <td className="px-4 py-3 text-sm space-x-3">
+                    <button
+                      onClick={() => navigate(`/employees/edit/${emp.id}`)}
+                      className="text-blue-600 hover:underline"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(emp.id, emp.full_name)}
+                      className="text-red-600 hover:underline"
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
               ))}
               {employees.length === 0 && (
                 <tr>
-                  <td colSpan="6" className="px-4 py-6 text-center text-sm text-gray-400">
+                  <td colSpan="7" className="px-4 py-6 text-center text-sm text-gray-400">
                     No employees found
                   </td>
                 </tr>
