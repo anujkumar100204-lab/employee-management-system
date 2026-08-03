@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../api/axios';
+import { ArrowLeft } from 'lucide-react';
 
 function EmployeeDetails() {
   const { id } = useParams();
@@ -37,24 +38,18 @@ function EmployeeDetails() {
   return (
     <div className="min-h-screen bg-slate-100 p-8">
 
-      <button  
+      <button
         onClick={() => navigate('/employees')}
-        className="text-blue-600 hover:underline mb-4 inline-block"
-        >
-        <span className="font-bold">←</span> Back to Employees
-        </button>
+        className="inline-flex items-center gap-2 text-blue-600 hover:underline mb-4"
+      >
+        <ArrowLeft size={18} />
+        <span>Back to Employees</span>
+      </button>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 max-w-2xl">
-        <div className="flex items-center gap-4 mb-6">
-          <img
-            src={`/default-avatar.png`}
-            alt="Profile"
-            className="w-16 h-16 rounded-full bg-slate-200 object-cover"
-          />
-          <div>
-            <h1 className="text-xl font-bold text-slate-800">{employee.full_name}</h1>
-            <p className="text-sm text-gray-500">{employee.employee_id}</p>
-          </div>
+        <div className="mb-6">
+          <h1 className="text-xl font-bold text-slate-800">{employee.full_name}</h1>
+          <p className="text-sm text-gray-500">{employee.employee_id}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
