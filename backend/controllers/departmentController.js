@@ -48,6 +48,11 @@ const removeDepartment = (req, res) => {
 
   deleteDepartment(id, (err, result) => {
     if (err) {
+      if (err.code === 'ER_ROW_IS_REFERENCED_2' || err.code === 'ER_ROW_IS_REFERENCED') {
+        return res.status(400).json({
+          message: 'Cannot delete department: employees are still assigned to it.',
+        });
+      }
       return res.status(500).json({ message: 'Server error', error: err.message });
     }
     if (result.affectedRows === 0) {
