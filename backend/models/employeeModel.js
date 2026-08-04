@@ -65,6 +65,23 @@ const getEmployeeById = (id, callback) => {
   });
 };
 
+const getEmployeeByUserId = (userId, callback) => {
+  const query = `
+    SELECT 
+      employees.*, 
+      departments.department_name
+    FROM employees
+    JOIN departments ON employees.department_id = departments.id
+    WHERE employees.user_id = ?
+  `;
+
+  db.query(query, [userId], (err, results) => {
+    if (err) return callback(err, null);
+    if (results.length === 0) return callback(null, null);
+    callback(null, results[0]);
+  });
+};
+
 const updateEmployee = (id, data, callback) => {
   const query = `
     UPDATE employees 
@@ -75,6 +92,15 @@ const updateEmployee = (id, data, callback) => {
   const values = [data.full_name, data.phone, data.address, data.department_id, data.salary, id];
 
   db.query(query, values, (err, result) => {
+    if (err) return callback(err, null);
+    callback(null, result);
+  });
+};
+
+const updateOwnProfile = (userId, data, callback) => {
+  const query = 'UPDATE employees SET phone = ?, address = ? WHERE user_id = ?';
+
+  db.query(query, [data.phone, data.address, userId], (err, result) => {
     if (err) return callback(err, null);
     callback(null, result);
   });
@@ -104,4 +130,12 @@ const deleteEmployee = (id, callback) => {
   });
 };
 
-module.exports = { getLastEmployeeId, getAllEmployees, getEmployeeById, updateEmployee, deleteEmployee };
+module.exports = {
+  getLastEmployeeId,
+  getAllEmployees,
+  getEmployeeById,
+  getEmployeeByUserId,
+  updateEmployee,
+  updateOwnProfile,
+  deleteEmployee,
+};

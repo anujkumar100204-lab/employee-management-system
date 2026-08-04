@@ -1,6 +1,14 @@
 const db = require('../config/db');
 const bcrypt = require('bcrypt');
-const { getLastEmployeeId, getAllEmployees, getEmployeeById, updateEmployee, deleteEmployee } = require('../models/employeeModel');
+const {
+  getLastEmployeeId,
+  getAllEmployees,
+  getEmployeeById,
+  getEmployeeByUserId,
+  updateEmployee,
+  updateOwnProfile,
+  deleteEmployee,
+} = require('../models/employeeModel');
 
 const generateNextEmployeeId = (lastId) => {
   if (!lastId) {
@@ -90,6 +98,35 @@ const getEmployee = (req, res) => {
   });
 };
 
+const getMyProfile = (req, res) => {
+  const userId = req.user.id;
+
+  getEmployeeByUserId(userId, (err, employee) => {
+    if (err) {
+      return res.status(500).json({ message: 'Server error', error: err.message });
+    }
+    if (!employee) {
+      return res.status(404).json({ message: 'Employee profile not found' });
+    }
+    res.status(200).json(employee);
+  });
+};
+
+const updateMyProfile = (req, res) => {
+  const userId = req.user.id;
+  const { phone, address } = req.body;
+
+  updateOwnProfile(userId, { phone, address }, (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: 'Server error', error: err.message });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Employee profile not found' });
+    }
+    res.status(200).json({ message: 'Profile updated successfully' });
+  });
+};
+
 const editEmployee = (req, res) => {
   const { id } = req.params;
   const { full_name, phone, address, department_id, salary } = req.body;
@@ -123,4 +160,12 @@ const removeEmployee = (req, res) => {
   });
 };
 
-module.exports = { addEmployee, getEmployees, getEmployee, editEmployee, removeEmployee };
+module.exports = {
+  addEmployee,
+  getEmployees,
+  getEmployee,
+  getMyProfile,
+  updateMyProfile,
+  editEmployee,
+  removeEmployee,
+};

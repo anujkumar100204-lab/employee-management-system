@@ -10,6 +10,9 @@ import EditEmployee from './pages/EditEmployee';
 import EmployeeDetails from './pages/EmployeeDetails';
 import Departments from './pages/Departments';
 import Notices from './pages/Notices';
+import EmployeeDashboard from './pages/EmployeeDashboard';
+import MyProfile from './pages/MyProfile';
+import EmployeeNotices from './pages/EmployeeNotices';
 
 function App() {
   return (
@@ -70,6 +73,30 @@ function App() {
           element={
             <ProtectedRoute>
               <Notices />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee-dashboard"
+          element={
+            <ProtectedRoute>
+              <EmployeeDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-profile"
+          element={
+            <ProtectedRoute>
+              <MyProfile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employee-notices"
+          element={
+            <ProtectedRoute>
+              <EmployeeNotices />
             </ProtectedRoute>
           }
         />

@@ -18,7 +18,12 @@ function Login() {
       localStorage.setItem('user', JSON.stringify(response.data.user));
 
       toast.success('Login successful!');
-      navigate('/dashboard');
+
+      if (response.data.user.role === 'admin') {
+        navigate('/dashboard');
+      } else {
+        navigate('/employee-dashboard');
+      }
     } catch (err) {
       toast.error(err.response?.data?.message || 'Login failed');
     }
