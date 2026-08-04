@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import api from '../api/axios';
+import Layout from '../components/Layout';
 
 function EmployeeList() {
   const [employees, setEmployees] = useState([]);
@@ -63,100 +64,102 @@ function EmployeeList() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 p-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-slate-800">Employees</h1>
-        <button
-          onClick={() => navigate('/employees/add')}
-          className="bg-blue-600 text-white font-medium px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-        >
-          + Add Employee
-        </button>
-      </div>
-
-      <div className="flex gap-4 mb-4">
-        <input
-          type="text"
-          placeholder="Search by name or employee ID..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="border border-gray-300 rounded-lg px-3 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-
-        <select
-          value={departmentId}
-          onChange={(e) => setDepartmentId(e.target.value)}
-          className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="">All Departments</option>
-          {departments.map((dept) => (
-            <option key={dept.id} value={dept.id}>
-              {dept.department_name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {loading ? (
-        <div className="text-slate-600">Loading employees...</div>
-      ) : (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto">
-          <table className="w-full text-left">
-            <thead className="bg-slate-50 border-b border-gray-200">
-              <tr>
-                <th className="px-4 py-3 text-sm font-semibold text-slate-600">Employee ID</th>
-                <th className="px-4 py-3 text-sm font-semibold text-slate-600">Name</th>
-                <th className="px-4 py-3 text-sm font-semibold text-slate-600">Gender</th>
-                <th className="px-4 py-3 text-sm font-semibold text-slate-600">Department</th>
-                <th className="px-4 py-3 text-sm font-semibold text-slate-600">Phone</th>
-                <th className="px-4 py-3 text-sm font-semibold text-slate-600">Salary</th>
-                <th className="px-4 py-3 text-sm font-semibold text-slate-600">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {employees.map((emp) => (
-                <tr key={emp.id} className="border-b border-gray-100 hover:bg-slate-50">
-                  <td className="px-4 py-3 text-sm text-slate-700">{emp.employee_id}</td>
-                  <td className="px-4 py-3 text-sm text-slate-700">
-                    <button
-                      onClick={() => navigate(`/employees/${emp.id}`)}
-                      className="text-blue-600 hover:underline"
-                    >
-                      {emp.full_name}
-                    </button>
-                  </td>
-                  <td className="px-4 py-3 text-sm text-slate-700 capitalize">{emp.gender}</td>
-                  <td className="px-4 py-3 text-sm text-slate-700">{emp.department_name}</td>
-                  <td className="px-4 py-3 text-sm text-slate-700">{emp.phone}</td>
-                  <td className="px-4 py-3 text-sm text-slate-700">₹{emp.salary}</td>
-                  <td className="px-4 py-3 text-sm space-x-3">
-                    <button
-                      onClick={() => navigate(`/employees/edit/${emp.id}`)}
-                      className="text-blue-600 hover:underline"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(emp.id, emp.full_name)}
-                      className="text-red-600 hover:underline"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-              {employees.length === 0 && (
-                <tr>
-                  <td colSpan="7" className="px-4 py-6 text-center text-sm text-gray-400">
-                    No employees found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+    <Layout>
+      <div className="p-8">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold text-slate-800">Employees</h1>
+          <button
+            onClick={() => navigate('/employees/add')}
+            className="bg-blue-600 text-white font-medium px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+          >
+            + Add Employee
+          </button>
         </div>
-      )}
-    </div>
+
+        <div className="flex gap-4 mb-4">
+          <input
+            type="text"
+            placeholder="Search by name or employee ID..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="border border-gray-300 rounded-lg px-3 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          <select
+            value={departmentId}
+            onChange={(e) => setDepartmentId(e.target.value)}
+            className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">All Departments</option>
+            {departments.map((dept) => (
+              <option key={dept.id} value={dept.id}>
+                {dept.department_name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {loading ? (
+          <div className="text-slate-600">Loading employees...</div>
+        ) : (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto">
+            <table className="w-full text-left">
+              <thead className="bg-slate-50 border-b border-gray-200">
+                <tr>
+                  <th className="px-4 py-3 text-sm font-semibold text-slate-600">Employee ID</th>
+                  <th className="px-4 py-3 text-sm font-semibold text-slate-600">Name</th>
+                  <th className="px-4 py-3 text-sm font-semibold text-slate-600">Gender</th>
+                  <th className="px-4 py-3 text-sm font-semibold text-slate-600">Department</th>
+                  <th className="px-4 py-3 text-sm font-semibold text-slate-600">Phone</th>
+                  <th className="px-4 py-3 text-sm font-semibold text-slate-600">Salary</th>
+                  <th className="px-4 py-3 text-sm font-semibold text-slate-600">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {employees.map((emp) => (
+                  <tr key={emp.id} className="border-b border-gray-100 hover:bg-slate-50">
+                    <td className="px-4 py-3 text-sm text-slate-700">{emp.employee_id}</td>
+                    <td className="px-4 py-3 text-sm text-slate-700">
+                      <button
+                        onClick={() => navigate(`/employees/${emp.id}`)}
+                        className="text-blue-600 hover:underline"
+                      >
+                        {emp.full_name}
+                      </button>
+                    </td>
+                    <td className="px-4 py-3 text-sm text-slate-700 capitalize">{emp.gender}</td>
+                    <td className="px-4 py-3 text-sm text-slate-700">{emp.department_name}</td>
+                    <td className="px-4 py-3 text-sm text-slate-700">{emp.phone}</td>
+                    <td className="px-4 py-3 text-sm text-slate-700">₹{emp.salary}</td>
+                    <td className="px-4 py-3 text-sm space-x-3">
+                      <button
+                        onClick={() => navigate(`/employees/edit/${emp.id}`)}
+                        className="text-blue-600 hover:underline"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(emp.id, emp.full_name)}
+                        className="text-red-600 hover:underline"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                {employees.length === 0 && (
+                  <tr>
+                    <td colSpan="7" className="px-4 py-6 text-center text-sm text-gray-400">
+                      No employees found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </Layout>
   );
 }
 
