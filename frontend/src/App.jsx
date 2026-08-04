@@ -9,6 +9,7 @@ import AddEmployee from './pages/AddEmployee';
 import EditEmployee from './pages/EditEmployee';
 import EmployeeDetails from './pages/EmployeeDetails';
 import Departments from './pages/Departments';
+import Notices from './pages/Notices';
 
 function App() {
   return (
@@ -61,6 +62,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Departments />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/notices"
+          element={
+            <ProtectedRoute>
+              <Notices />
             </ProtectedRoute>
           }
         />
