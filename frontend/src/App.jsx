@@ -13,6 +13,7 @@ import Notices from './pages/Notices';
 import EmployeeDashboard from './pages/EmployeeDashboard';
 import MyProfile from './pages/MyProfile';
 import EmployeeNotices from './pages/EmployeeNotices';
+import Settings from './pages/Settings';
 
 function App() {
   return (
@@ -97,6 +98,14 @@ function App() {
           element={
             <ProtectedRoute>
               <EmployeeNotices />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Settings />
             </ProtectedRoute>
           }
         />

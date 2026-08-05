@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Users, Building2, Bell, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, Building2, Bell, Settings as SettingsIcon, LogOut } from 'lucide-react';
 
 function Layout({ children }) {
   const navigate = useNavigate();
@@ -15,6 +15,7 @@ function Layout({ children }) {
     { to: '/employees', label: 'Employees', icon: Users },
     { to: '/departments', label: 'Departments', icon: Building2 },
     { to: '/notices', label: 'Notices', icon: Bell },
+    { to: '/settings', label: 'Settings', icon: SettingsIcon },
   ];
 
   return (
