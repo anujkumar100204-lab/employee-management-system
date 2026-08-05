@@ -1,19 +1,22 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import EmployeeList from './pages/EmployeeList';
-import ProtectedRoute from './components/ProtectedRoute';
 import AddEmployee from './pages/AddEmployee';
 import EditEmployee from './pages/EditEmployee';
 import EmployeeDetails from './pages/EmployeeDetails';
 import Departments from './pages/Departments';
 import Notices from './pages/Notices';
+import Settings from './pages/Settings';
+
 import EmployeeDashboard from './pages/EmployeeDashboard';
 import MyProfile from './pages/MyProfile';
 import EmployeeNotices from './pages/EmployeeNotices';
-import Settings from './pages/Settings';
+
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -21,26 +24,20 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
+
+        {/* Admin-only routes */}
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="admin">
               <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/employees"
-          element={
-            <ProtectedRoute>
-              <EmployeeList />
             </ProtectedRoute>
           }
         />
         <Route
           path="/employees/add"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="admin">
               <AddEmployee />
             </ProtectedRoute>
           }
@@ -48,7 +45,7 @@ function App() {
         <Route
           path="/employees/edit/:id"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="admin">
               <EditEmployee />
             </ProtectedRoute>
           }
@@ -56,15 +53,23 @@ function App() {
         <Route
           path="/employees/:id"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="admin">
               <EmployeeDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employees"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <EmployeeList />
             </ProtectedRoute>
           }
         />
         <Route
           path="/departments"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="admin">
               <Departments />
             </ProtectedRoute>
           }
@@ -72,15 +77,25 @@ function App() {
         <Route
           path="/notices"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="admin">
               <Notices />
             </ProtectedRoute>
           }
         />
         <Route
+          path="/settings"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <Settings />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Employee-only routes */}
+        <Route
           path="/employee-dashboard"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="employee">
               <EmployeeDashboard />
             </ProtectedRoute>
           }
@@ -88,7 +103,7 @@ function App() {
         <Route
           path="/my-profile"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="employee">
               <MyProfile />
             </ProtectedRoute>
           }
@@ -96,16 +111,8 @@ function App() {
         <Route
           path="/employee-notices"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="employee">
               <EmployeeNotices />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/settings"
-          element={
-            <ProtectedRoute>
-              <Settings />
             </ProtectedRoute>
           }
         />
