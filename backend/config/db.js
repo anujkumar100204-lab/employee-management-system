@@ -7,6 +7,9 @@ const db = mysql.createConnection({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   port: process.env.DB_PORT,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 db.connect((err) => {
@@ -14,7 +17,7 @@ db.connect((err) => {
     console.error('Database connection failed:', err.message);
     return;
   }
-  console.log('Connected to MySQL database: vertex_ems');
+  console.log('Connected to MySQL database: defaultdb (Aiven Cloud)');
 });
 
 module.exports = db;
