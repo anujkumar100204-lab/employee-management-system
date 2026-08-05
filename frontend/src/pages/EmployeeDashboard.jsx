@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import api from '../api/axios';
 import EmployeeLayout from '../components/EmployeeLayout';
 
@@ -21,6 +22,26 @@ function EmployeeDashboard() {
     fetchProfile();
   }, []);
 
+  const handleDownloadSlip = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await api.get('/salary/slip', {
+        headers: { Authorization: `Bearer ${token}` },
+        responseType: 'blob',
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `SalarySlip_${profile.employee_id}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) {
+      toast.error('Failed to download salary slip');
+    }
+  };
+
   return (
     <EmployeeLayout>
       <div className="p-8">
@@ -41,6 +62,7 @@ function EmployeeDashboard() {
             </div>
           )}
           <button
+            onClick={handleDownloadSlip}
             className="mt-4 bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-blue-700 transition"
           >
             Download Salary Slip

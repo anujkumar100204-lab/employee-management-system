@@ -7,6 +7,7 @@ const employeeRoutes = require('./routes/employeeRoutes');
 const departmentRoutes = require('./routes/departmentRoutes');
 const noticeRoutes = require('./routes/noticeRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
+const salaryRoutes = require('./routes/salaryRoutes');
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use('/api/employees', employeeRoutes);
 app.use('/api/departments', departmentRoutes);
 app.use('/api/notices', noticeRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/salary', salaryRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
